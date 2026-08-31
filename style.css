@@ -284,6 +284,106 @@ body {
   }
 }
 
+/* --- CARTÃO DE VISITAS DIGITAL --- */
+.cartao-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  background: linear-gradient(135deg, #faf7f8 0%, var(--cor-secundaria) 100%);
+}
+
+.cartao-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 380px;
+  padding: 35px 25px;
+  border-radius: 24px;
+  box-shadow: 0 15px 35px rgba(168, 93, 130, 0.12);
+  text-align: center;
+  border: 1px solid rgba(224, 194, 209, 0.4);
+}
+
+.cartao-avatar img {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--cor-primaria);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px;
+}
+
+.cartao-nome {
+  font-size: 1.4rem;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+}
+
+.cartao-tag {
+  font-size: 0.85rem;
+  color: var(--cor-primaria);
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 25px;
+}
+
+.cartao-links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.btn-cartao {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 20px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: var(--transicao-suave);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.btn-whatsapp {
+  background-color: #25d366;
+  color: #ffffff;
+}
+
+.btn-site {
+  background-color: var(--cor-primaria);
+  color: #ffffff;
+}
+
+.btn-insta {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  color: #ffffff;
+}
+
+.btn-location {
+  background-color: #ffffff;
+  color: #555555;
+  border: 1px solid #e0e0e0;
+}
+
+.btn-cartao:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+}
+
+.cartao-footer p {
+  font-size: 0.8rem;
+  color: var(--cor-texto-claro);
+  margin-top: 25px;
+  font-style: italic;
+}
+
 @media (max-width: 600px) {
   .hero-content h1 {
     font-size: 2rem;
