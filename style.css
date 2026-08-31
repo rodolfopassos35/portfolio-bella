@@ -1,0 +1,307 @@
+/* --- CONFIGURAÇÕES GERAIS --- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --cor-primaria: #a85d82;
+  /* Rosa Seco Marcon */
+  --cor-secundaria: #e0c2d1;
+  /* Rosa Claro */
+  --cor-acento: #d4af37;
+  /* Dourado suave */
+  --cor-fundo: #faf7f8;
+  /* Off-White Rose */
+  --cor-texto-escuro: #333;
+  --cor-texto-claro: #666;
+  --transicao-suave: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+body {
+  background-color: var(--cor-fundo);
+  color: var(--cor-texto-escuro);
+  font-family: 'Poppins', sans-serif;
+  /* Recomendado importar a fonte Poppins */
+  line-height: 1.6;
+}
+
+/* --- BANNER PRINCIPAL (HERO) --- */
+.hero {
+  background: linear-gradient(135deg, #fff 0%, var(--cor-secundaria) 100%);
+  padding: 100px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-container {
+  max-width: 1200px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 50px;
+  align-items: center;
+}
+
+.hero-image img {
+  width: 100%;
+  max-width: 450px;
+  height: auto;
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+  object-fit: cover;
+}
+
+.hero-content h1 {
+  font-size: 3rem;
+  color: #1a1a1a;
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+
+.hero-content p {
+  font-size: 1.1rem;
+  color: var(--cor-texto-claro);
+  margin-bottom: 30px;
+}
+
+.subtitle {
+  text-transform: uppercase;
+  color: var(--cor-primaria);
+  font-weight: 600;
+  letter-spacing: 2px;
+  font-size: 0.9rem;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.btn-primary {
+  display: inline-block;
+  background-color: var(--cor-primaria);
+  color: #fff;
+  padding: 15px 35px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: var(--transicao-suave);
+  box-shadow: 0 10px 20px rgba(168, 93, 130, 0.2);
+}
+
+.btn-primary:hover {
+  background-color: #8c4a6b;
+  transform: translateY(-3px);
+  box-shadow: 0 15px 25px rgba(168, 93, 130, 0.3);
+}
+
+/* --- SEÇÃO DO PORTFÓLIO --- */
+.portfolio {
+  padding: 80px 20px;
+}
+
+.portfolio-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.portfolio-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.portfolio-header h2 {
+  font-size: 2.5rem;
+  color: #1a1a1a;
+}
+
+.portfolio-header p {
+  color: var(--cor-texto-claro);
+}
+
+/* Filtros Visuais Modernos */
+.filtros-visuales {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 40px;
+}
+
+.btn-filtro {
+  background: transparent;
+  border: 1px solid var(--cor-primaria);
+  color: var(--cor-primaria);
+  padding: 10px 25px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: var(--transicao-suave);
+}
+
+.btn-filtro.active,
+.btn-filtro:hover {
+  background-color: var(--cor-primaria);
+  color: #fff;
+}
+
+/* --- GALERIA MODERNA (GRID E CARDS) --- */
+.galeria-moderna {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+/* Card Moderno com Hover */
+.card-moderno {
+  position: relative;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  transition: var(--transicao-suave);
+  aspect-ratio: 4 / 5;
+  /* Mantém a proporção da imagem */
+}
+
+.card-moderno:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+}
+
+.card-moderno img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: var(--transicao-suave);
+}
+
+.card-moderno:hover img {
+  transform: scale(1.05);
+}
+
+/* Conteúdo sobreposto (Overlay) */
+.card-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  opacity: 0;
+  transition: var(--transicao-suave);
+}
+
+.card-moderno:hover .card-overlay {
+  opacity: 1;
+}
+
+.card-overlay h3 {
+  font-size: 1.3rem;
+  margin-bottom: 5px;
+}
+
+.card-overlay p {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+/* --- RESPONSIVIDADE --- */
+@media (max-width: 992px) {
+  .hero-container {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .hero-image img {
+    margin: 0 auto;
+    max-width: 350px;
+  }
+}
+
+/* --- BOTÃO FLUTUANTE DO WHATSAPP --- */
+.whatsapp-float {
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  bottom: 25px;
+  right: 25px;
+  background-color: #25d366;
+  color: #fff;
+  border-radius: 50%;
+  text-align: center;
+  font-size: 32px;
+  box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  animation: pulse-whatsapp 2s infinite;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.1);
+  background-color: #20ba5a;
+  box-shadow: 0 12px 25px rgba(37, 211, 102, 0.6);
+}
+
+/* Balão de Texto (Tooltip) */
+.whatsapp-tooltip {
+  position: absolute;
+  right: 70px;
+  background-color: #333;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  font-weight: 500;
+}
+
+.whatsapp-float:hover .whatsapp-tooltip {
+  opacity: 1;
+}
+
+/* Animação suave de pulso */
+@keyframes pulse-whatsapp {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+  }
+
+  70% {
+    box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+  }
+}
+
+@media (max-width: 600px) {
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+
+  .portfolio-header h2 {
+    font-size: 2rem;
+  }
+
+  .filtros-visuales {
+    flex-wrap: wrap;
+  }
+
+  .whatsapp-float {
+    width: 55px;
+    height: 55px;
+    bottom: 20px;
+    right: 20px;
+    font-size: 28px;
+  }
+}

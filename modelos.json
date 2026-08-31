@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "titulo": "Volume Russo Imponente",
+    "categoria": "volume-russo",
+    "descricao": "Preenchimento denso e marcante com fios ultra leves que mantêm a saúde do cílio natural.",
+    "imagem": "img/volume-russo2.webp"
+  },
+  {
+    "id": 2,
+    "titulo": "Fio a Fio Clássico",
+    "categoria": "fio-a-fio",
+    "descricao": "Efeito natural que realça a curvatura e o comprimento sem pescar o olhar.",
+    "imagem": "img/classico-fio-a-fio.webp"
+  },
+  {
+    "id": 3,
+    "titulo": "Efeito Fox Eye",
+    "categoria": "efeito-fox",
+    "descricao": "Mapeamento alongado no canto externo para promover um olhar levemente puxado e elegante.",
+    "imagem": "img/efeito-fox-eye.webp"
+  },
+  {
+    "id": 4,
+    "titulo": "Volume Brasileiro",
+    "categoria": "volume-brasileiro",
+    "descricao": "Proporciona retenção prolongada com efeito volumoso e textura marcante.",
+    "imagem": "img/volume-brasileiro1.webp"
+  },
+  {
+    "id": 5,
+    "titulo": "Volume Brasileiro",
+    "categoria": "volume-brasileiro",
+    "descricao": "Proporciona retenção prolongada com efeito volumoso e textura marcante.",
+    "imagem": "img/volume-brasileiro2.webp"
+  }
+]
