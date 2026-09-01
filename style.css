@@ -67,6 +67,25 @@ body {
   margin-bottom: 30px;
 }
 
+/* Contêiner de botões do Hero */
+.hero-buttons {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Ajuste de alinhamento para os botões do hero */
+.hero-buttons .btn-primary,
+.hero-buttons .btn-instagram {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  /* Garante exatamente a mesma altura nos dois */
+  padding: 0 28px;
+}
+
 .subtitle {
   text-transform: uppercase;
   color: var(--cor-primaria);
@@ -218,6 +237,11 @@ body {
   .hero-image img {
     margin: 0 auto;
     max-width: 350px;
+  }
+
+  .hero-buttons {
+    justify-content: center;
+    /* Centraliza os botões em telas menores */
   }
 }
 
