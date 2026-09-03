@@ -33,5 +33,12 @@
     "categoria": "volume-brasileiro",
     "descricao": "Proporciona retenção prolongada com efeito volumoso e textura marcante.",
     "imagem": "img/volume-brasileiro2.webp"
+  },
+  {
+    "id": 6,
+    "titulo": "Volume Egípcio",
+    "categoria": "Egípcio",
+    "descricao": "Proporciona um efeito volumoso e marcante, com fios leves que mantêm a saúde do cílio natural.",
+    "imagem": "img/egipcio.webp"
   }
 ]
