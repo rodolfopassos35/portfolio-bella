@@ -1,66 +1,94 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>STUDIO BELLA MARTILIANO | Lash Designer</title>
+    <link rel="stylesheet" href="./style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>STUDIO BELLA MARTILIANO | Lash Designer</title>
-  <link rel="stylesheet" href="./style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
+  <body>
+    <section class="hero">
+      <div class="hero-container">
+        <div class="hero-image">
+          <img src="img/bella.jpeg" alt="Bella Martiliano" />
+        </div>
+        <div class="hero-content">
+          <span class="subtitle">STUDIO Bella Martiliano • Lash Designer</span>
+          <h1>Realçando sua beleza natural com cada fio.</h1>
+          <p>
+            Transforme seu olhar com técnicas exclusivas e personalizadas para o
+            seu rosto. Agende sua sessão e sinta-se poderosa.
+          </p>
 
-<body>
-
-  <section class="hero">
-    <div class="hero-container">
-      <div class="hero-image">
-        <img src="img/bella.jpeg" alt="Bella Martiliano">
-      </div>
-      <div class="hero-content">
-        <span class="subtitle">STUDIO Bella Martiliano • Lash Designer</span>
-        <h1>Realçando sua beleza natural com cada fio.</h1>
-        <p>Transforme seu olhar com técnicas exclusivas e personalizadas para o seu rosto. Agende sua sessão e sinta-se
-          poderosa.</p>
-
-        <div class="hero-buttons">
-          <a href="https://wa.me/5519983575633" class="btn-primary">Agendar Meu Horário</a>
-          <a href="https://www.instagram.com/studio_bella_martiliano/" target="_blank" rel="noopener noreferrer"
-            class="btn-instagram">
-            <i class="fab fa-instagram"></i> Siga no Instagram
-          </a>
+          <div class="hero-buttons">
+            <a href="https://wa.me/5519983575633" class="btn-primary"
+              >Agendar Meu Horário</a
+            >
+            <a
+              href="https://www.instagram.com/studio_bella_martiliano/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-instagram"
+            >
+              <i class="fab fa-instagram"></i> Siga no Instagram
+            </a>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="portfolio">
-    <div class="portfolio-container">
-      <div class="portfolio-header">
-        <h2>Meus Trabalhos</h2>
-        <p>Explore as transformações e inspire-se</p>
+    <section class="portfolio">
+      <div class="portfolio-container">
+        <div class="portfolio-header">
+          <h2>Meus Trabalhos</h2>
+          <p>Explore as transformações e inspire-se</p>
+        </div>
+
+        <nav class="filtros-visuales">
+          <button class="btn-filtro active" data-categoria="todos">
+            Todos
+          </button>
+          <button class="btn-filtro" data-categoria="fio-a-fio">
+            Fio a Fio
+          </button>
+          <button class="btn-filtro" data-categoria="volume-russo">
+            Volume Russo
+          </button>
+          <button class="btn-filtro" data-categoria="efeito-fox">
+            Efeito Fox
+          </button>
+          <button class="btn-filtro" data-categoria="volume-brasileiro">
+            Volume Brasileiro
+          </button>
+          <button class="btn-filtro" data-categoria="Egípcio">
+            Volume Egípcio
+          </button>
+          <button class="btn-filtro" data-categoria="volume-baby">
+            Volume Baby
+          </button>
+        </nav>
+
+        <main class="galeria-moderna" id="galeria-modelos"></main>
       </div>
+    </section>
 
-      <nav class="filtros-visuales">
-        <button class="btn-filtro active" data-categoria="todos">Todos</button>
-        <button class="btn-filtro" data-categoria="fio-a-fio">Fio a Fio</button>
-        <button class="btn-filtro" data-categoria="volume-russo">Volume Russo</button>
-        <button class="btn-filtro" data-categoria="efeito-fox">Efeito Fox</button>
-        <button class="btn-filtro" data-categoria="volume-brasileiro">Volume Brasileiro</button>
-        <button class="btn-filtro" data-categoria="Egípcio">Volume Egípcio</button>
-      </nav>
+    <!-- Botão Flutuante do WhatsApp -->
+    <a
+      href="https://wa.me/5519983575633?text=Ol%C3%A1%20Bella!%20Vim%20pelo%20site%20e%20gostaria%20de%20agendar%20um%20hor%C3%A1rio."
+      class="whatsapp-float"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Agendar via WhatsApp"
+    >
+      <i class="fab fa-whatsapp"></i>
+      <span class="whatsapp-tooltip">Agende seu horário!</span>
+    </a>
 
-      <main class="galeria-moderna" id="galeria-modelos"></main>
-    </div>
-  </section>
-
-  <!-- Botão Flutuante do WhatsApp -->
-  <a href="https://wa.me/5519983575633?text=Ol%C3%A1%20Bella!%20Vim%20pelo%20site%20e%20gostaria%20de%20agendar%20um%20hor%C3%A1rio."
-    class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Agendar via WhatsApp">
-    <i class="fab fa-whatsapp"></i>
-    <span class="whatsapp-tooltip">Agende seu horário!</span>
-  </a>
-
-  <script src="script.js"></script>
-</body>
-
+    <script src="script.js"></script>
+  </body>
 </html>

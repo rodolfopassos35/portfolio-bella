@@ -40,5 +40,53 @@
     "categoria": "Egípcio",
     "descricao": "Proporciona um efeito volumoso e marcante, com fios leves que mantêm a saúde do cílio natural.",
     "imagem": "img/egipcio.webp"
+  },
+  {
+    "id": 7,
+    "titulo": "Volume Brasileiro",
+    "categoria": "volume-brasileiro",
+    "descricao": "Proporciona retenção prolongada com efeito volumoso e textura marcante.",
+    "imagem": "img/volume-brasileiro3.webp"
+  },
+  { 
+    "id": 8,
+    "titulo": "Volume Egípcio",
+    "categoria": "Egípcio",
+    "descricao": "Proporciona um efeito volumoso e marcante, com fios leves que mantêm a saúde do cílio natural.",
+    "imagem": "img/egipcio2.webp"
+  },
+  {"id": 9,
+    "titulo": "Volume Brasileiro",
+    "categoria": "volume-brasileiro",
+    "descricao": "Proporciona retenção prolongada com efeito volumoso e textura marcante.",
+    "imagem": "img/volume-brasileiro4.webp"
+  },
+  {
+    "id": 10,
+    "titulo": "Volume Egípcio",
+    "categoria": "Egípcio",
+    "descricao": "Proporciona um efeito volumoso e marcante, com fios leves que mantêm a saúde do cílio natural.",
+    "imagem": "img/egipcio3.webp"
+  },
+   {
+    "id": 11,
+    "titulo": "Volume Brasileiro",
+    "categoria": "volume-brasileiro",
+    "descricao": "Proporciona retenção prolongada com efeito volumoso e textura marcante.",
+    "imagem": "img/volume-brasileiro5.webp"
+  },
+  {
+    "id": 12,
+    "titulo": "Volume Baby",
+    "categoria": "volume-baby",
+    "descricao": "Proporciona um efeito volumoso e marcante, com fios leves que mantêm a saúde do cílio natural.",
+    "imagem": "img/volume-baby.webp"
+  },
+  {
+    "id": 13,
+    "titulo": "Volume Baby",
+    "categoria": "volume-baby",
+    "descricao": "Proporciona um efeito volumoso e marcante, com fios leves que mantêm a saúde do cílio natural.",
+    "imagem": "img/volume-baby2.webp"
   }
 ]
