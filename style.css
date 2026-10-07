@@ -178,7 +178,7 @@ body {
   box-shadow: var(--shadow-card);
   transition: var(--transicao-suave);
   aspect-ratio: 4 / 5;
-  /* Mantém a proporção da imagem */
+  background-color: #f3e8ee;
 }
 
 .card-moderno:hover {
@@ -189,7 +189,8 @@ body {
 .card-moderno img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  border-radius: 10px;
   transition: var(--transicao-suave);
 }
 
@@ -402,23 +403,6 @@ body {
   background-color: #ffffff;
   color: #555555;
   border: 1px solid #e0e0e0;
-}
-
-/* Botão do Google Maps / Localização */
-.btn-maps {
-  background: #ffffff;
-  color: #a85d82;
-  border: 1.5px solid #e0c2d1;
-}
-
-.btn-maps i {
-  color: #d93025;
-  /* Vermelho característico do pin do Google Maps */
-}
-
-.btn-maps:hover {
-  background: #fdf8fa;
-  border-color: #a85d82;
 }
 
 .btn-cartao:hover {

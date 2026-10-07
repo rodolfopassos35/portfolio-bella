@@ -1,17 +1,17 @@
 [
   {
     "id": 1,
-    "titulo": "Volume Russo Imponente",
-    "categoria": "volume-russo",
+    "titulo": "Volume Brasileiro",
+    "categoria": "volume-brasileiro",
     "descricao": "Preenchimento denso e marcante com fios ultra leves que mantêm a saúde do cílio natural.",
-    "imagem": "img/volume-russo2.webp"
+    "imagem": "img/volume-brasileiro-10.webp"
   },
   {
     "id": 2,
-    "titulo": "Fio a Fio Clássico",
-    "categoria": "fio-a-fio",
+    "titulo": "Volume Egípcio",
+    "categoria": "volume-egipcio",
     "descricao": "Efeito natural que realça a curvatura e o comprimento sem pescar o olhar.",
-    "imagem": "img/classico-fio-a-fio.webp"
+    "imagem": "img/volume-egipcio-10.webp"
   },
   {
     "id": 3,
@@ -37,7 +37,7 @@
   {
     "id": 6,
     "titulo": "Volume Egípcio",
-    "categoria": "Egípcio",
+    "categoria": "volume-egipcio",
     "descricao": "Proporciona um efeito volumoso e marcante, com fios leves que mantêm a saúde do cílio natural.",
     "imagem": "img/egipcio.webp"
   },
@@ -51,7 +51,7 @@
   { 
     "id": 8,
     "titulo": "Volume Egípcio",
-    "categoria": "Egípcio",
+    "categoria": "volume-egipcio",
     "descricao": "Proporciona um efeito volumoso e marcante, com fios leves que mantêm a saúde do cílio natural.",
     "imagem": "img/egipcio2.webp"
   },
@@ -64,11 +64,11 @@
   {
     "id": 10,
     "titulo": "Volume Egípcio",
-    "categoria": "Egípcio",
+    "categoria": "volume-egipcio",
     "descricao": "Proporciona um efeito volumoso e marcante, com fios leves que mantêm a saúde do cílio natural.",
     "imagem": "img/egipcio3.webp"
   },
-   {
+  {
     "id": 11,
     "titulo": "Volume Brasileiro",
     "categoria": "volume-brasileiro",
@@ -88,5 +88,33 @@
     "categoria": "volume-baby",
     "descricao": "Proporciona um efeito volumoso e marcante, com fios leves que mantêm a saúde do cílio natural.",
     "imagem": "img/volume-baby2.webp"
-  }
+  },
+{
+  "id": 14,
+  "titulo":"Volume Brasileiro",
+  "categoria":"volume-brasileiro",
+  "descricao":"Proporciona retenção prolongada com efeito volumoso e textura marcante.",
+  "imagem":"img/volume-brasileiro-11.webp"  
+},
+{
+  "id": 15,
+  "titulo": "Fox Eyes",
+  "categoria": "efeito-fox",
+  "descricao": "Efeito de olhos intensos e expressivos, com fios que criam um visual dramático.",
+  "imagem": "img/fox-eyes-11.webp"
+},
+{
+  "id": 16,
+  "titulo": "Sobrancelha",
+  "categoria": "sobrancelha",
+  "descricao": "Design de sobrancelha sem o uso de hena, proporcionando um visual natural e definido.",
+  "imagem": "img/sobrancelha-design-sem-hena-1.webp"
+},
+{
+  "id": 17,
+  "titulo": "Sobrancelha",
+  "categoria": "sobrancelha",
+  "descricao": "Design de sobrancelha sem o uso de hena, proporcionando um visual natural e definido.",
+  "imagem": "img/sobrancelha-design-sem-hena-2.webp"
+}
 ]
