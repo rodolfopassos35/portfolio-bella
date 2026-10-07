@@ -116,74 +116,92 @@ body {
 
 /* --- SEÇÃO DE PREÇOS E SERVIÇOS --- */
 .precos {
-  padding: 60px 20px;
+  padding: 30px 15px;
+  /* Reduzido o espaço do topo/base */
   background-color: #fff;
 }
 
 .precos-container {
-  max-width: 1100px;
+  max-width: 800px;
   margin: 0 auto;
 }
 
 .precos-header {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 25px;
+  /* Espaçamento menor e mais compacto */
 }
 
 .precos-header h2 {
-  font-size: 2.3rem;
+  font-size: 1.8rem;
   color: #1a1a1a;
+  margin-bottom: 5px;
 }
 
 .precos-header p {
   color: var(--cor-texto-claro);
+  font-size: 0.9rem;
 }
 
 .tabela-precos-grid {
   display: flex;
   flex-direction: column;
-  gap: 35px;
+  gap: 20px;
 }
 
 .card-preco {
   background: var(--cor-fundo);
   border: 1px solid rgba(224, 194, 209, 0.6);
-  border-radius: 18px;
-  padding: 25px;
+  border-radius: 16px;
+  padding: 20px 18px;
   box-shadow: var(--shadow-card);
 }
 
 .card-preco h3 {
   color: var(--cor-primaria);
-  font-size: 1.3rem;
-  margin-bottom: 20px;
+  font-size: 1.2rem;
+  margin-bottom: 15px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  border-bottom: 2px solid rgba(168, 93, 130, 0.2);
+  padding-bottom: 8px;
 }
 
-.tabela-servicos {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: left;
+/* Lista Flexível para os Itens */
+.preco-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px dashed rgba(224, 194, 209, 0.8);
 }
 
-.tabela-servicos th,
-.tabela-servicos td {
-  padding: 12px 15px;
-  border-bottom: 1px solid #e0c2d1;
-  font-size: 0.95rem;
-}
-
-.tabela-servicos th {
-  background-color: rgba(168, 93, 130, 0.1);
-  color: var(--cor-primaria);
-  font-weight: 600;
-  border-radius: 6px;
-}
-
-.tabela-servicos tr:last-child td {
+.preco-item:last-child {
   border-bottom: none;
+}
+
+.preco-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.preco-info strong {
+  font-size: 0.98rem;
+  color: #333;
+}
+
+.sub-linha {
+  font-size: 0.78rem;
+  color: var(--cor-texto-claro);
+}
+
+.preco-valor {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--cor-primaria);
+  white-space: nowrap;
 }
 
 /* --- SEÇÃO DO PORTFÓLIO --- */
