@@ -62,9 +62,25 @@
         font-weight: bold;
         margin-top: 15px;
         cursor: pointer;
+        transition: background 0.3s ease;
+      }
+      button:disabled {
+        background: #ccc !important;
+        cursor: not-allowed;
       }
       button.btn-danger {
         background: #d9534f;
+      }
+      button.btn-sair {
+        background: transparent;
+        color: #888;
+        border: 1px solid #ccc;
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        width: auto;
+        margin: 0 auto 15px auto;
+        display: block;
+        border-radius: 20px;
       }
       .grid-fotos {
         display: grid;
@@ -77,62 +93,104 @@
         object-fit: cover;
         border-radius: 8px;
       }
+      /* Ecrã de Login */
+      #tela-login {
+        text-align: center;
+        margin-top: 50px;
+      }
+      #conteudo-painel {
+        display: none;
+      }
     </style>
   </head>
   <body>
-    <h1>🌸 Painel da Bella</h1>
+    <!-- ECRÃ DE LOGIN COM SUPABASE AUTH -->
+    <div id="tela-login" class="card">
+      <h1>🌸 Acesso Restrito</h1>
+      <p style="font-size: 0.9rem; color: #666; margin-bottom: 15px">
+        Inicie sessão para gerir o Studio Bella Martiliano:
+      </p>
 
-    <!-- SEÇÃO DE SERVIÇOS E PREÇOS -->
-    <h2>🏷️ Tabela de Preços</h2>
-    <div id="lista-servicos">A carregar serviços...</div>
-
-    <!-- SEÇÃO DE FOTOS DO PORTFÓLIO -->
-    <h2>📸 Galeria de Fotos</h2>
-    <div class="card">
-      <h3>Adicionar Nova Foto</h3>
-
-      <label>Título</label>
+      <label style="text-align: left">Email:</label>
       <input
-        type="text"
-        id="foto-titulo"
-        list="sugestoes-titulos"
-        placeholder="Ex: Volume Brasileiro "
-        autocomplete="off"
-      />
-      <datalist id="sugestoes-titulos">
-        <option value="Volume Brasileiro"></option>
-        <option value="Volume Egípcio"></option>
-        <option value="Volume Baby"></option>
-        <option value="Efeito Fox Eye"></option>
-        <option value="Design com Henna"></option>
-        <option value="Design sem Henna"></option>
-      </datalist>
-
-      <label>Categoria (Escolha ou digite uma nova):</label>
-      <input
-        type="text"
-        id="foto-categoria"
-        list="sugestoes-categorias"
-        placeholder="Ex: volume-brasileiro"
-        autocomplete="off"
+        type="email"
+        id="login-email"
+        placeholder="exemplo@email.com"
+        autocomplete="email"
       />
 
-      <datalist id="sugestoes-categorias">
-        <option value="volume-brasileiro"></option>
-        <option value="volume-egipcio"></option>
-        <option value="efeito-fox"></option>
-        <option value="volume-baby"></option>
-        <option value="sobrancelha"></option>
-      </datalist>
+      <label style="text-align: left">Palavra-passe:</label>
+      <input
+        type="password"
+        id="login-senha"
+        placeholder="Digite a palavra-passe..."
+        autocomplete="current-password"
+      />
 
-      <label>Selecione a Imagem:</label>
-      <input type="file" id="foto-arquivo" accept="image/*" />
-
-      <button onclick="adicionarFoto()">📤 Fazer Upload e Publicar</button>
+      <button id="btn-entrar" onclick="fazerLogin()">Entrar no Painel</button>
     </div>
 
-    <h3>Fotos Atuais na Galeria</h3>
-    <div id="lista-fotos" class="grid-fotos">A carregar galeria...</div>
+    <!-- CONTEÚDO PRIVADO DO PAINEL -->
+    <div id="conteudo-painel">
+      <button class="btn-sair" onclick="fazerLogout()">
+        🔒 Sair / Terminar Sessão
+      </button>
+
+      <h1>🌸 Painel da Bella</h1>
+
+      <!-- SEÇÃO DE SERVIÇOS E PREÇOS -->
+      <h2>🏷️ Tabela de Preços</h2>
+      <div id="lista-servicos">A carregar serviços...</div>
+
+      <!-- SEÇÃO DE FOTOS DO PORTFÓLIO -->
+      <h2>📸 Galeria de Fotos</h2>
+      <div class="card">
+        <h3>Adicionar Nova Foto</h3>
+
+        <label>Título / Nome da Cliente:</label>
+        <input
+          type="text"
+          id="foto-titulo"
+          list="sugestoes-titulos"
+          placeholder="Ex: Volume Brasileiro da Ana"
+          autocomplete="off"
+        />
+        <datalist id="sugestoes-titulos">
+          <option value="Volume Brasileiro"></option>
+          <option value="Volume Egípcio"></option>
+          <option value="Volume Baby"></option>
+          <option value="Efeito Fox Eye"></option>
+          <option value="Design com Henna"></option>
+          <option value="Design sem Henna"></option>
+        </datalist>
+
+        <label>Categoria (Escolha ou digite uma nova):</label>
+        <input
+          type="text"
+          id="foto-categoria"
+          list="sugestoes-categorias"
+          placeholder="Ex: volume-brasileiro"
+          autocomplete="off"
+        />
+        <datalist id="sugestoes-categorias">
+          <option value="volume-brasileiro"></option>
+          <option value="volume-egipcio"></option>
+          <option value="efeito-fox"></option>
+          <option value="volume-baby"></option>
+          <option value="sobrancelha"></option>
+        </datalist>
+
+        <label>Selecione a Imagem:</label>
+        <input type="file" id="foto-arquivo" accept="image/*" />
+
+        <button id="btn-upload" onclick="adicionarFoto()">
+          📤 Fazer Upload e Publicar
+        </button>
+      </div>
+
+      <h3>Fotos Atuais na Galeria</h3>
+      <div id="lista-fotos" class="grid-fotos">A carregar galeria...</div>
+    </div>
 
     <script>
       // URL do projeto sem o 'z' extra
@@ -142,6 +200,72 @@
       const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
         global: { headers: { apikey: SUPABASE_KEY } },
       });
+
+      // --- AUTENTICAÇÃO SUPABASE ---
+      async function verificarSessao() {
+        const {
+          data: { session },
+        } = await _supabase.auth.getSession();
+        if (session) {
+          exibirPainel();
+        } else {
+          exibirLogin();
+        }
+      }
+
+      async function fazerLogin() {
+        const email = document.getElementById("login-email").value.trim();
+        const password = document.getElementById("login-senha").value;
+        const btn = document.getElementById("btn-entrar");
+
+        if (!email || !password) {
+          alert("Por favor, preencha o email e a palavra-passe!");
+          return;
+        }
+
+        btn.disabled = true;
+        btn.innerText = "⏳ A autenticar...";
+
+        const { data, error } = await _supabase.auth.signInWithPassword({
+          email: email,
+          password: password,
+        });
+
+        if (error) {
+          alert("Erro ao iniciar sessão: " + error.message);
+          btn.disabled = false;
+          btn.innerText = "Entrar no Painel";
+        } else {
+          exibirPainel();
+        }
+      }
+
+      async function fazerLogout() {
+        await _supabase.auth.signOut();
+        exibirLogin();
+      }
+
+      function exibirPainel() {
+        document.getElementById("tela-login").style.display = "none";
+        document.getElementById("conteudo-painel").style.display = "block";
+        carregarServicos();
+        carregarFotos();
+      }
+
+      function exibirLogin() {
+        document.getElementById("tela-login").style.display = "block";
+        document.getElementById("conteudo-painel").style.display = "none";
+        document.getElementById("btn-entrar").disabled = false;
+        document.getElementById("btn-entrar").innerText = "Entrar no Painel";
+      }
+
+      document
+        .getElementById("login-senha")
+        ?.addEventListener("keypress", function (e) {
+          if (e.key === "Enter") fazerLogin();
+        });
+
+      verificarSessao();
 
       // --- SERVIÇOS ---
       async function carregarServicos() {
@@ -172,16 +296,19 @@
               <label>Manutenção 22 dias:</label>
               <input type="text" id="m22-${item.id}" value="${item.manutencao_22 || ""}">
 
-              <button onclick="salvarServico(${item.id})">💾 Guardar Alteração</button>
+              <button onclick="salvarServico(${item.id}, this)">💾 Guardar Alteração</button>
             </div>
           `;
         });
       }
 
-      async function salvarServico(id) {
+      async function salvarServico(id, btn) {
         const novoPreco = document.getElementById(`preco-${id}`).value;
         const novaM15 = document.getElementById(`m15-${id}`).value;
         const novaM22 = document.getElementById(`m22-${id}`).value;
+
+        btn.disabled = true;
+        btn.innerText = "⏳ A guardar...";
 
         const { error } = await _supabase
           .from("servicos")
@@ -192,8 +319,14 @@
           })
           .eq("id", id);
 
-        if (error) alert("Erro ao guardar: " + error.message);
-        else alert("✨ Preço atualizado com sucesso!");
+        if (error) {
+          alert("Erro ao guardar: " + error.message);
+        } else {
+          alert("✨ Preço atualizado com sucesso!");
+        }
+
+        btn.disabled = false;
+        btn.innerText = "💾 Guardar Alteração";
       }
 
       // --- GALERIA DE FOTOS ---
@@ -216,13 +349,52 @@
               <img src="${foto.url}" alt="${foto.titulo}">
               <p style="font-size: 0.8rem; margin: 5px 0;"><strong>${foto.titulo}</strong></p>
               <p style="font-size: 0.7rem; color: #888;">${foto.categoria}</p>
-              <button class="btn-danger" onclick="excluirFoto(${foto.id}, '${foto.url}')">🗑️ Remover</button>
+              <button class="btn-danger" onclick="excluirFoto(${foto.id}, '${foto.url}', this)">🗑️ Remover</button>
             </div>
           `;
         });
       }
 
+      // Função auxiliar para redimensionar e converter imagem para WebP no telemóvel
+      function otimizarImagem(file) {
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = (event) => {
+            const img = new Image();
+            img.src = event.target.result;
+            img.onload = () => {
+              const canvas = document.createElement("canvas");
+              let largura = img.width;
+              let altura = img.height;
+              const larguraMaxima = 1080; // Largura ideal para web / mobile
+
+              if (largura > larguraMaxima) {
+                altura = Math.round((altura * larguraMaxima) / largura);
+                largura = larguraMaxima;
+              }
+
+              canvas.width = largura;
+              canvas.height = altura;
+
+              const ctx = canvas.getContext("2d");
+              ctx.drawImage(img, 0, 0, largura, altura);
+
+              // Converte para WebP com qualidade de 82%
+              canvas.toBlob(
+                (blob) => {
+                  resolve(blob);
+                },
+                "image/webp",
+                0.82,
+              );
+            };
+          };
+        });
+      }
+
       async function adicionarFoto() {
+        const btn = document.getElementById("btn-upload");
         const inputTitulo = document.getElementById("foto-titulo");
         const inputCategoria = document.getElementById("foto-categoria");
         const arquivoInput = document.getElementById("foto-arquivo");
@@ -239,39 +411,40 @@
           return;
         }
 
-        const nomeArquivo = `${Date.now()}_${arquivo.name}`;
+        btn.disabled = true;
+        btn.innerText = "⏳ A otimizar e enviar...";
 
-        // 1. Upload da imagem para o Storage (Bucket: galeria)
-        const { data: storageData, error: storageError } =
-          await _supabase.storage.from("galeria").upload(nomeArquivo, arquivo);
+        try {
+          // Otimiza e converte para .webp automaticamente antes do upload
+          const imagemOtimizadaBlob = await otimizarImagem(arquivo);
+          const nomeArquivo = `${Date.now()}_foto.webp`;
 
-        if (storageError) {
-          alert("Erro ao enviar imagem: " + storageError.message);
-          return;
-        }
+          const { error: storageError } = await _supabase.storage
+            .from("galeria")
+            .upload(nomeArquivo, imagemOtimizadaBlob, {
+              contentType: "image/webp",
+            });
 
-        // 2. Obter a URL pública da imagem
-        const { data: publicUrlData } = _supabase.storage
-          .from("galeria")
-          .getPublicUrl(nomeArquivo);
+          if (storageError) throw storageError;
 
-        const urlPublica = publicUrlData.publicUrl;
+          const { data: publicUrlData } = _supabase.storage
+            .from("galeria")
+            .getPublicUrl(nomeArquivo);
 
-        // 3. Salvar registro na tabela 'fotos'
-        const { error: dbError } = await _supabase.from("fotos").insert([
-          {
-            titulo: titulo,
-            categoria: categoria || "geral",
-            url: urlPublica,
-          },
-        ]);
+          const urlPublica = publicUrlData.publicUrl;
 
-        if (dbError) {
-          alert("Erro ao registrar foto no banco: " + dbError.message);
-        } else {
-          alert("✨ Foto adicionada com sucesso!");
+          const { error: dbError } = await _supabase.from("fotos").insert([
+            {
+              titulo: titulo,
+              categoria: categoria || "geral",
+              url: urlPublica,
+            },
+          ]);
 
-          // Limpa os campos e limpa a memória do autocompletar do navegador
+          if (dbError) throw dbError;
+
+          alert("✨ Foto publicada com sucesso!");
+
           inputTitulo.value = "";
           inputCategoria.value = "";
           arquivoInput.value = "";
@@ -279,26 +452,33 @@
           inputCategoria.blur();
 
           carregarFotos();
+        } catch (erro) {
+          alert("Erro no upload: " + erro.message);
+        } finally {
+          btn.disabled = false;
+          btn.innerText = "📤 Fazer Upload e Publicar";
         }
       }
 
-      async function excluirFoto(id, url) {
+      async function excluirFoto(id, url, btn) {
         if (!confirm("Tem certeza que deseja remover esta foto?")) return;
+
+        btn.disabled = true;
+        btn.innerText = "⏳ A remover...";
 
         const nomeArquivo = url.split("/").pop();
 
         await _supabase.storage.from("galeria").remove([nomeArquivo]);
         const { error } = await _supabase.from("fotos").delete().eq("id", id);
 
-        if (error) alert("Erro ao excluir foto: " + error.message);
-        else {
-          alert("Foto removida!");
+        if (error) {
+          alert("Erro ao excluir foto: " + error.message);
+          btn.disabled = false;
+          btn.innerText = "🗑️ Remover";
+        } else {
           carregarFotos();
         }
       }
-
-      carregarServicos();
-      carregarFotos();
     </script>
   </body>
 </html>
