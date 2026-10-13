@@ -57,52 +57,52 @@
             <div class="preco-item">
               <div class="preco-info">
                 <strong>Volume Brasileiro</strong>
-                <span class="sub-linha"
+                <span class="sub-linha" id="m-ordem-1"
                   >Manutenção: 15 dias (R$ 80,00) <br />
                   22 dias (R$ 85,00)</span
                 >
               </div>
-              <div class="preco-valor">R$ 90,00</div>
+              <div class="preco-valor" id="preco-ordem-1">R$ 90,00</div>
             </div>
 
             <div class="preco-item">
               <div class="preco-info">
                 <strong>Volume Baby</strong>
-                <span class="sub-linha"
+                <span class="sub-linha" id="m-ordem-2"
                   >Manutenção: 15 dias (R$ 80,00) <br />
                   22 dias (R$ 85,00)</span
                 >
               </div>
-              <div class="preco-valor">R$ 90,00</div>
+              <div class="preco-valor" id="preco-ordem-2">R$ 90,00</div>
             </div>
 
             <div class="preco-item">
               <div class="preco-info">
                 <strong>Volume Egípcio</strong>
-                <span class="sub-linha"
+                <span class="sub-linha" id="m-ordem-3"
                   >Manutenção: 15 dias (R$ 90,00) <br />
                   22 dias (R$ 95,00)</span
                 >
               </div>
-              <div class="preco-valor">R$ 100,00</div>
+              <div class="preco-valor" id="preco-ordem-3">R$ 100,00</div>
             </div>
 
             <div class="preco-item">
               <div class="preco-info">
                 <strong>Efeito Fox Eye</strong>
-                <span class="sub-linha"
+                <span class="sub-linha" id="m-ordem-4"
                   >Manutenção: 15 dias (R$ 95,00) <br />
                   22 dias (R$ 100,00)</span
                 >
               </div>
-              <div class="preco-valor">R$ 105,00</div>
+              <div class="preco-valor" id="preco-ordem-4">R$ 105,00</div>
             </div>
 
             <div class="preco-item">
               <div class="preco-info">
                 <strong>Remoção de Cílios</strong>
               </div>
-              <div class="preco-valor">R$ 40,00</div>
+              <div class="preco-valor" id="preco-ordem-5">R$ 40,00</div>
             </div>
           </div>
 
@@ -114,14 +114,14 @@
               <div class="preco-info">
                 <strong>Design sem Henna</strong>
               </div>
-              <div class="preco-valor">R$ 30,00</div>
+              <div class="preco-valor" id="preco-ordem-6">R$ 30,00</div>
             </div>
 
             <div class="preco-item">
               <div class="preco-info">
                 <strong>Design com Henna</strong>
               </div>
-              <div class="preco-valor">R$ 40,00</div>
+              <div class="preco-valor" id="preco-ordem-7">R$ 40,00</div>
             </div>
           </div>
         </div>
@@ -135,24 +135,10 @@
           <p>Explore as transformações e inspire-se</p>
         </div>
 
-        <nav class="filtros-visuales">
+        <!-- Filtros Visuais -->
+        <nav class="filtros-visuales" id="container-filtros">
           <button class="btn-filtro active" data-categoria="todos">
             Todos
-          </button>
-          <button class="btn-filtro" data-categoria="efeito-fox">
-            Efeito Fox
-          </button>
-          <button class="btn-filtro" data-categoria="volume-brasileiro">
-            Volume Brasileiro
-          </button>
-          <button class="btn-filtro" data-categoria="volume-egipcio">
-            Volume Egípcio
-          </button>
-          <button class="btn-filtro" data-categoria="volume-baby">
-            Volume Baby
-          </button>
-          <button class="btn-filtro" data-categoria="sobrancelha">
-            Sobrancelha
           </button>
         </nav>
 
@@ -173,5 +159,98 @@
     </a>
 
     <script src="script.js"></script>
+
+    <!-- SDK do Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+      const SUPABASE_URL = "https://zxrdgftskzgzkmzspmrb.supabase.co";
+      const SUPABASE_KEY = "sb_publishable_mnSYr7BG5eLx4x6wK_qejg_gKBkytbo";
+
+      const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+        global: { headers: { apikey: SUPABASE_KEY } },
+      });
+
+      // Atualiza os preços no site
+      async function carregarPrecosSite() {
+        const { data: servicos, error } = await _supabase
+          .from("servicos")
+          .select("*")
+          .order("ordem");
+
+        if (error || !servicos) return;
+
+        servicos.forEach((item) => {
+          const elPreco = document.getElementById(`preco-ordem-${item.ordem}`);
+          if (elPreco && item.preco) {
+            elPreco.innerText = `R$ ${parseFloat(item.preco).toFixed(2).replace(".", ",")}`;
+          }
+
+          const elManutencao = document.getElementById(`m-ordem-${item.ordem}`);
+          if (elManutencao && (item.manutencao_15 || item.manutencao_22)) {
+            elManutencao.innerHTML = `Manutenção: 15 dias (${item.manutencao_15 || "N/A"}) <br /> 22 dias (${item.manutencao_22 || "N/A"})`;
+          }
+        });
+      }
+
+      // Busca as fotos do Supabase e renderiza com os filtros ativados
+      async function carregarFotosSupabase() {
+        const { data: fotos, error } = await _supabase
+          .from("fotos")
+          .select("*")
+          .order("id", { ascending: false });
+
+        if (error || !fotos || fotos.length === 0) {
+          console.error("Erro ao carregar fotos:", error);
+          return;
+        }
+
+        // Mapeia as fotos tratando possíveis categorias vazias
+        todosModelos = fotos.map((f) => ({
+          id: f.id,
+          titulo: f.titulo || "Trabalho Bella",
+          categoria: f.categoria
+            ? f.categoria.toLowerCase().trim().replace(/\s+/g, "-")
+            : "outros",
+          descricao: "Procedimento realizado no Studio Bella Martiliano.",
+          imagem: f.url,
+        }));
+
+        // Pega todas as categorias únicas encontradas nas fotos
+        const categoriasUnicas = [
+          "todos",
+          ...new Set(todosModelos.map((m) => m.categoria)),
+        ];
+        const navFiltros = document.getElementById("container-filtros");
+
+        if (navFiltros) {
+          navFiltros.innerHTML = categoriasUnicas
+            .map(
+              (cat) => `
+      <button class="btn-filtro ${cat === "todos" ? "active" : ""}" data-categoria="${cat}">
+        ${cat.charAt(0).toUpperCase() + cat.slice(1).replace(/-/g, " ")}
+      </button>
+    `,
+            )
+            .join("");
+
+          // Reaplica os eventos de clique em cada botão gerado dinamicamente
+          document.querySelectorAll(".btn-filtro").forEach((botao) => {
+            botao.addEventListener("click", (e) => {
+              document
+                .querySelectorAll(".btn-filtro")
+                .forEach((btn) => btn.classList.remove("active"));
+              e.target.classList.add("active");
+              filtrarModelos(e.target.getAttribute("data-categoria"));
+            });
+          });
+        }
+
+        renderizarCards(todosModelos);
+      }
+
+      carregarPrecosSite();
+      carregarFotosSupabase();
+    </script>
   </body>
 </html>
