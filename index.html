@@ -171,26 +171,124 @@
         global: { headers: { apikey: SUPABASE_KEY } },
       });
 
-      // Atualiza os preços no site
+      // Função auxiliar para formatar qualquer número/texto em moeda R$
+      function formatarMoeda(valor) {
+        if (!valor) return null;
+        if (
+          isNaN(valor) &&
+          valor.toString().toLowerCase().includes("consult")
+        ) {
+          return valor;
+        }
+        const valorLimpo = valor
+          .toString()
+          .replace(/[^\d.,]/g, "")
+          .replace(",", ".");
+        const numero = parseFloat(valorLimpo);
+        if (isNaN(numero)) return null;
+        return `R$ ${numero.toFixed(2).replace(".", ",")}`;
+      }
+
+      // Atualiza os preços no site dinamicamente e organiza a ordenação
       async function carregarPrecosSite() {
         const { data: servicos, error } = await _supabase
           .from("servicos")
           .select("*")
-          .order("ordem");
+          .order("id", { ascending: true });
 
         if (error || !servicos) return;
 
-        servicos.forEach((item) => {
-          const elPreco = document.getElementById(`preco-ordem-${item.ordem}`);
-          if (elPreco && item.preco) {
-            elPreco.innerText = `R$ ${parseFloat(item.preco).toFixed(2).replace(".", ",")}`;
+        const containerCilios = document.querySelector(
+          ".card-preco:nth-child(1)",
+        );
+        const containerSobrancelhas = document.querySelector(
+          ".card-preco:nth-child(2)",
+        );
+
+        if (!containerCilios) return;
+
+        let htmlCilios = `<h3><i class="fas fa-eye"></i> Extensão de Cílios</h3>`;
+        let htmlSobrancelhas = `<h3><i class="fas fa-feather-alt"></i> Design de Sobrancelhas</h3>`;
+
+        // 1. Separa os serviços por categoria
+        const servicosCilios = servicos.filter((item) => {
+          const catLower = (item.categoria || "").toLowerCase();
+          return !catLower.includes("sobrancelha");
+        });
+
+        const servicosSobrancelhas = servicos.filter((item) => {
+          const catLower = (item.categoria || "").toLowerCase();
+          return catLower.includes("sobrancelha");
+        });
+
+        // 2. Ordena os cílios para jogar a 'Remoção' sempre para o fim da lista
+        servicosCilios.sort((a, b) => {
+          const aRemocao =
+            (a.nome || "").toLowerCase().includes("remoção") ||
+            (a.nome || "").toLowerCase().includes("remocao");
+          const bRemocao =
+            (b.nome || "").toLowerCase().includes("remoção") ||
+            (b.nome || "").toLowerCase().includes("remocao");
+
+          if (aRemocao && !bRemocao) return 1; // Envia 'a' para o fim
+          if (!aRemocao && bRemocao) return -1; // Mantém 'b' no fim
+          return 0;
+        });
+
+        // 3. Renderiza a lista de Cílios
+        servicosCilios.forEach((item) => {
+          const precoPrincipal = formatarMoeda(item.preco) || "R$ 0,00";
+          const m15 = formatarMoeda(item.manutencao_15);
+          const m22 = formatarMoeda(item.manutencao_22);
+
+          let manutencaoText = "";
+          if (m15 || m22) {
+            const textoM15 = m15 ? `15 dias (${m15})` : "";
+            const textoM22 = m22 ? `22 dias (${m22})` : "";
+            const separador = m15 && m22 ? " <br /> " : "";
+            manutencaoText = `<span class="sub-linha">Manutenção: ${textoM15}${separador}${textoM22}</span>`;
           }
 
-          const elManutencao = document.getElementById(`m-ordem-${item.ordem}`);
-          if (elManutencao && (item.manutencao_15 || item.manutencao_22)) {
-            elManutencao.innerHTML = `Manutenção: 15 dias (${item.manutencao_15 || "N/A"}) <br /> 22 dias (${item.manutencao_22 || "N/A"})`;
-          }
+          htmlCilios += `
+      <div class="preco-item">
+        <div class="preco-info">
+          <strong>${item.nome}</strong>
+          ${manutencaoText}
+        </div>
+        <div class="preco-valor">${precoPrincipal}</div>
+      </div>
+    `;
         });
+
+        // 4. Renderiza a lista de Sobrancelhas
+        servicosSobrancelhas.forEach((item) => {
+          const precoPrincipal = formatarMoeda(item.preco) || "R$ 0,00";
+          const m15 = formatarMoeda(item.manutencao_15);
+          const m22 = formatarMoeda(item.manutencao_22);
+
+          let manutencaoText = "";
+          if (m15 || m22) {
+            const textoM15 = m15 ? `15 dias (${m15})` : "";
+            const textoM22 = m22 ? `22 dias (${m22})` : "";
+            const separador = m15 && m22 ? " <br /> " : "";
+            manutencaoText = `<span class="sub-linha">Manutenção: ${textoM15}${separador}${textoM22}</span>`;
+          }
+
+          htmlSobrancelhas += `
+      <div class="preco-item">
+        <div class="preco-info">
+          <strong>${item.nome}</strong>
+          ${manutencaoText}
+        </div>
+        <div class="preco-valor">${precoPrincipal}</div>
+      </div>
+    `;
+        });
+
+        containerCilios.innerHTML = htmlCilios;
+        if (containerSobrancelhas) {
+          containerSobrancelhas.innerHTML = htmlSobrancelhas;
+        }
       }
 
       // Busca as fotos do Supabase e renderiza com os filtros ativados

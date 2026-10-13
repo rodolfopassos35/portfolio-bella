@@ -51,6 +51,35 @@
         box-sizing: border-box;
         font-size: 1rem;
       }
+      /* Estilo da caixa de seleção do novo serviço */
+      .checkbox-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 15px;
+        background: #f0e4eb;
+        padding: 10px;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+      .checkbox-container input {
+        width: auto;
+        margin: 0;
+        cursor: pointer;
+      }
+      .checkbox-container span {
+        font-weight: bold;
+        font-size: 0.9rem;
+        color: #a85d82;
+      }
+      #campos-novo-servico {
+        display: none;
+        background: #fff5f9;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px dashed #a85d82;
+        margin-top: 10px;
+      }
       button {
         width: 100%;
         background: #a85d82;
@@ -93,7 +122,6 @@
         object-fit: cover;
         border-radius: 8px;
       }
-      /* Ecrã de Login */
       #tela-login {
         text-align: center;
         margin-top: 50px;
@@ -104,7 +132,7 @@
     </style>
   </head>
   <body>
-    <!-- ECRÃ DE LOGIN COM SUPABASE AUTH -->
+    <!-- ECRÃ DE LOGIN -->
     <div id="tela-login" class="card">
       <h1>🌸 Acesso Restrito</h1>
       <p style="font-size: 0.9rem; color: #666; margin-bottom: 15px">
@@ -130,7 +158,7 @@
       <button id="btn-entrar" onclick="fazerLogin()">Entrar no Painel</button>
     </div>
 
-    <!-- CONTEÚDO PRIVADO DO PAINEL -->
+    <!-- CONTEÚDO DO PAINEL -->
     <div id="conteudo-painel">
       <button class="btn-sair" onclick="fazerLogout()">
         🔒 Sair / Terminar Sessão
@@ -138,21 +166,21 @@
 
       <h1>🌸 Painel da Bella</h1>
 
-      <!-- SEÇÃO DE SERVIÇOS E PREÇOS -->
-      <h2>🏷️ Tabela de Preços</h2>
+      <!-- SEÇÃO DE PREÇOS EXISTENTES -->
+      <h2>🏷️ Tabela de Preços Atual</h2>
       <div id="lista-servicos">A carregar serviços...</div>
 
-      <!-- SEÇÃO DE FOTOS DO PORTFÓLIO -->
-      <h2>📸 Galeria de Fotos</h2>
+      <!-- SEÇÃO DE GALERIA DE FOTOS E CADASTRO -->
+      <h2>📸 Publicar Foto / Novo Serviço</h2>
       <div class="card">
-        <h3>Adicionar Nova Foto</h3>
+        <h3>Adicionar Foto</h3>
 
-        <label>Título / Nome da Cliente:</label>
+        <label>Título / Nome do Procedimento:</label>
         <input
           type="text"
           id="foto-titulo"
           list="sugestoes-titulos"
-          placeholder="Ex: Volume Brasileiro da Ana"
+          placeholder="Ex: Volume Wispy"
           autocomplete="off"
         />
         <datalist id="sugestoes-titulos">
@@ -160,16 +188,17 @@
           <option value="Volume Egípcio"></option>
           <option value="Volume Baby"></option>
           <option value="Efeito Fox Eye"></option>
+          <option value="Volume Wispy"></option>
           <option value="Design com Henna"></option>
           <option value="Design sem Henna"></option>
         </datalist>
 
-        <label>Categoria (Escolha ou digite uma nova):</label>
+        <label>Categoria (Filtro do site):</label>
         <input
           type="text"
           id="foto-categoria"
           list="sugestoes-categorias"
-          placeholder="Ex: volume-brasileiro"
+          placeholder="Ex: volume-wispy"
           autocomplete="off"
         />
         <datalist id="sugestoes-categorias">
@@ -177,13 +206,50 @@
           <option value="volume-egipcio"></option>
           <option value="efeito-fox"></option>
           <option value="volume-baby"></option>
+          <option value="volume-wispy"></option>
           <option value="sobrancelha"></option>
         </datalist>
 
         <label>Selecione a Imagem:</label>
         <input type="file" id="foto-arquivo" accept="image/*" />
 
-        <button id="btn-upload" onclick="adicionarFoto()">
+        <!-- CHECKBOX PARA NOVO SERVIÇO -->
+        <div class="checkbox-container" onclick="toggleCamposServico()">
+          <input
+            type="checkbox"
+            id="chk-novo-servico"
+            onclick="
+              event.stopPropagation();
+              toggleCamposServico();
+            "
+          />
+          <span>✨ É um novo serviço? (Adicionar à Tabela de Preços)</span>
+        </div>
+
+        <!-- CAMPOS EXTRAS QUE SÓ APARECEM SE O CHECKBOX FOR MARCADO -->
+        <div id="campos-novo-servico">
+          <label>Secção da Tabela:</label>
+          <select id="srv-categoria-tipo">
+            <option value="Lash / Cílios">Extensão de Cílios</option>
+            <option value="Sobrancelhas">Design de Sobrancelhas</option>
+          </select>
+
+          <label>Preço Principal (R$):</label>
+          <input
+            type="number"
+            step="0.01"
+            id="srv-preco"
+            placeholder="Ex: 110.00"
+          />
+
+          <label>Manutenção 15 dias (Opcional):</label>
+          <input type="text" id="srv-m15" placeholder="Ex: R$ 95,00" />
+
+          <label>Manutenção 22 dias (Opcional):</label>
+          <input type="text" id="srv-m22" placeholder="Ex: R$ 100,00" />
+        </div>
+
+        <button id="btn-upload" onclick="adicionarFotoEServico()">
           📤 Fazer Upload e Publicar
         </button>
       </div>
@@ -193,7 +259,6 @@
     </div>
 
     <script>
-      // URL do projeto sem o 'z' extra
       const SUPABASE_URL = "https://zxrdgftskzgzkmzspmrb.supabase.co/";
       const SUPABASE_KEY = "sb_publishable_mnSYr7BG5eLx4x6wK_qejg_gKBkytbo";
 
@@ -201,7 +266,13 @@
         global: { headers: { apikey: SUPABASE_KEY } },
       });
 
-      // --- AUTENTICAÇÃO SUPABASE ---
+      function toggleCamposServico() {
+        const chk = document.getElementById("chk-novo-servico");
+        const campos = document.getElementById("campos-novo-servico");
+        campos.style.display = chk.checked ? "block" : "none";
+      }
+
+      // --- AUTENTICAÇÃO ---
       async function verificarSessao() {
         const {
           data: { session },
@@ -273,10 +344,11 @@
         const { data, error } = await _supabase
           .from("servicos")
           .select("*")
-          .order("ordem");
+          .order("id", { ascending: true });
 
         if (error || !data || data.length === 0) {
-          container.innerHTML = "<p>Nenhum serviço encontrado.</p>";
+          container.innerHTML =
+            "<p>Nenhum serviço cadastrado na tabela de preços.</p>";
           return;
         }
 
@@ -285,7 +357,7 @@
           container.innerHTML += `
             <div class="card">
               <h3>${item.nome}</h3>
-              <p><small>${item.categoria}</small></p>
+              <p><small>Categoria: ${item.categoria || "Geral"}</small></p>
               
               <label>Preço Principal (R$):</label>
               <input type="number" step="0.01" id="preco-${item.id}" value="${item.preco}">
@@ -297,6 +369,7 @@
               <input type="text" id="m22-${item.id}" value="${item.manutencao_22 || ""}">
 
               <button onclick="salvarServico(${item.id}, this)">💾 Guardar Alteração</button>
+              <button class="btn-danger" onclick="excluirServico(${item.id}, this)" style="margin-top: 5px;">🗑️ Apagar Serviço</button>
             </div>
           `;
         });
@@ -329,7 +402,32 @@
         btn.innerText = "💾 Guardar Alteração";
       }
 
-      // --- GALERIA DE FOTOS ---
+      async function excluirServico(id, btn) {
+        if (
+          !confirm(
+            "Tem certeza que deseja apagar este serviço da tabela de preços?",
+          )
+        )
+          return;
+
+        btn.disabled = true;
+        btn.innerText = "⏳ A apagar...";
+
+        const { error } = await _supabase
+          .from("servicos")
+          .delete()
+          .eq("id", id);
+
+        if (error) {
+          alert("Erro ao apagar serviço: " + error.message);
+          btn.disabled = false;
+          btn.innerText = "🗑️ Apagar Serviço";
+        } else {
+          carregarServicos();
+        }
+      }
+
+      // --- GALERIA DE FOTOS E UPLOAD (COM SUPORTE A NOVO SERVIÇO) ---
       async function carregarFotos() {
         const container = document.getElementById("lista-fotos");
         const { data, error } = await _supabase
@@ -355,7 +453,6 @@
         });
       }
 
-      // Função auxiliar para redimensionar e converter imagem para WebP no telemóvel
       function otimizarImagem(file) {
         return new Promise((resolve) => {
           const reader = new FileReader();
@@ -367,7 +464,7 @@
               const canvas = document.createElement("canvas");
               let largura = img.width;
               let altura = img.height;
-              const larguraMaxima = 1080; // Largura ideal para web / mobile
+              const larguraMaxima = 1080;
 
               if (largura > larguraMaxima) {
                 altura = Math.round((altura * larguraMaxima) / largura);
@@ -380,7 +477,6 @@
               const ctx = canvas.getContext("2d");
               ctx.drawImage(img, 0, 0, largura, altura);
 
-              // Converte para WebP com qualidade de 82%
               canvas.toBlob(
                 (blob) => {
                   resolve(blob);
@@ -393,11 +489,12 @@
         });
       }
 
-      async function adicionarFoto() {
+      async function adicionarFotoEServico() {
         const btn = document.getElementById("btn-upload");
         const inputTitulo = document.getElementById("foto-titulo");
         const inputCategoria = document.getElementById("foto-categoria");
         const arquivoInput = document.getElementById("foto-arquivo");
+        const chkNovoServico = document.getElementById("chk-novo-servico");
 
         const titulo = inputTitulo.value.trim();
         const categoria = inputCategoria.value
@@ -411,11 +508,20 @@
           return;
         }
 
+        let precoVal = 0;
+        if (chkNovoServico.checked) {
+          precoVal = parseFloat(document.getElementById("srv-preco").value);
+          if (isNaN(precoVal)) {
+            alert("Por favor, informe o Preço Principal do novo serviço!");
+            return;
+          }
+        }
+
         btn.disabled = true;
         btn.innerText = "⏳ A otimizar e enviar...";
 
         try {
-          // Otimiza e converte para .webp automaticamente antes do upload
+          // 1. Otimiza e envia a foto para o Storage
           const imagemOtimizadaBlob = await otimizarImagem(arquivo);
           const nomeArquivo = `${Date.now()}_foto.webp`;
 
@@ -433,7 +539,8 @@
 
           const urlPublica = publicUrlData.publicUrl;
 
-          const { error: dbError } = await _supabase.from("fotos").insert([
+          // 2. Insere a foto na tabela 'fotos'
+          const { error: dbFotoError } = await _supabase.from("fotos").insert([
             {
               titulo: titulo,
               categoria: categoria || "geral",
@@ -441,19 +548,46 @@
             },
           ]);
 
-          if (dbError) throw dbError;
+          if (dbFotoError) throw dbFotoError;
 
-          alert("✨ Foto publicada com sucesso!");
+          // 3. Se marcou o checkbox, insere também na tabela 'servicos'
+          if (chkNovoServico.checked) {
+            const catTipo = document.getElementById("srv-categoria-tipo").value;
+            const m15Val = document.getElementById("srv-m15").value.trim();
+            const m22Val = document.getElementById("srv-m22").value.trim();
 
+            const { error: dbServicoError } = await _supabase
+              .from("servicos")
+              .insert([
+                {
+                  nome: titulo,
+                  categoria: catTipo,
+                  preco: precoVal,
+                  manutencao_15: m15Val,
+                  manutencao_22: m22Val,
+                  ordem: 99,
+                },
+              ]);
+
+            if (dbServicoError) throw dbServicoError;
+          }
+
+          alert("✨ Publicado com sucesso!");
+
+          // Limpa todos os campos
           inputTitulo.value = "";
           inputCategoria.value = "";
           arquivoInput.value = "";
-          inputTitulo.blur();
-          inputCategoria.blur();
+          document.getElementById("srv-preco").value = "";
+          document.getElementById("srv-m15").value = "";
+          document.getElementById("srv-m22").value = "";
+          chkNovoServico.checked = false;
+          toggleCamposServico();
 
           carregarFotos();
+          carregarServicos();
         } catch (erro) {
-          alert("Erro no upload: " + erro.message);
+          alert("Erro no processo: " + erro.message);
         } finally {
           btn.disabled = false;
           btn.innerText = "📤 Fazer Upload e Publicar";
