@@ -303,16 +303,47 @@
           return;
         }
 
-        // Mapeia as fotos tratando possíveis categorias vazias
-        todosModelos = fotos.map((f) => ({
-          id: f.id,
-          titulo: f.titulo || "Trabalho Bella",
-          categoria: f.categoria
-            ? f.categoria.toLowerCase().trim().replace(/\s+/g, "-")
-            : "outros",
-          descricao: "Procedimento realizado no Studio Bella Martiliano.",
-          imagem: f.url,
-        }));
+        // Dicionário de descrições atraentes para cada procedimento
+        const descricoesPadrao = {
+          "volume brasileiro":
+            "Preenchimento denso e marcante com fios ultra leves que mantêm a saúde do cílio natural.",
+          "volume egípcio":
+            "Efeito natural que realça a curvatura e o comprimento sem pesar o olhar, proporcionando elegância.",
+          "efeito fox eye":
+            "Mapeamento alongado no canto externo para promover um olhar levemente puxado e sofisticado.",
+          "volume baby":
+            "Proporciona um efeito leve e delicado, ideal para quem busca realçar o olhar com suavidade.",
+          "volume wispy":
+            "Técnica moderna com efeito de picos texturizados, garantindo um olhar marcante e moderno.",
+          "design com henna":
+            "Design personalizado com aplicação de henna para preencher falhas e definir o formato perfeito.",
+          "design sem henna":
+            "Design de sobrancelha impecável, proporcionando um visual natural, limpo e bem definido.",
+        };
+
+        // Mapeia as fotos e aplica as descrições atraentes automaticamente
+        todosModelos = fotos.map((f) => {
+          const tituloLower = (f.titulo || "").toLowerCase().trim();
+
+          let descricaoAtraente =
+            "Transformação exclusiva realizada com todo cuidado para realçar a sua beleza natural.";
+          for (const [chave, desc] of Object.entries(descricoesPadrao)) {
+            if (tituloLower.includes(chave)) {
+              descricaoAtraente = desc; // Corrigido aqui (sem o 'ee' duplo)
+              break;
+            }
+          }
+
+          return {
+            id: f.id,
+            titulo: f.titulo || "Trabalho Bella",
+            categoria: f.categoria
+              ? f.categoria.toLowerCase().trim().replace(/\s+/g, "-")
+              : "outros",
+            descricao: descricaoAtraente,
+            imagem: f.url,
+          };
+        });
 
         // Pega todas as categorias únicas encontradas nas fotos
         const categoriasUnicas = [
@@ -325,14 +356,13 @@
           navFiltros.innerHTML = categoriasUnicas
             .map(
               (cat) => `
-      <button class="btn-filtro ${cat === "todos" ? "active" : ""}" data-categoria="${cat}">
-        ${cat.charAt(0).toUpperCase() + cat.slice(1).replace(/-/g, " ")}
-      </button>
-    `,
+              <button class="btn-filtro ${cat === "todos" ? "active" : ""}" data-categoria="${cat}">
+                ${cat.charAt(0).toUpperCase() + cat.slice(1).replace(/-/g, " ")}
+              </button>
+            `,
             )
             .join("");
 
-          // Reaplica os eventos de clique em cada botão gerado dinamicamente
           document.querySelectorAll(".btn-filtro").forEach((botao) => {
             botao.addEventListener("click", (e) => {
               document
