@@ -210,6 +210,23 @@
           <option value="sobrancelha"></option>
         </datalist>
 
+        <label>Descrição Personalizada (Opcional):</label>
+        <textarea
+          id="foto-descricao"
+          rows="3"
+          placeholder="Ex: Preenchimento com fios leves, curvatura C..."
+          style="
+            width: 100%;
+            padding: 10px;
+            margin-top: 4px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            font-family: sans-serif;
+          "
+        ></textarea>
+
         <label>Selecione a Imagem:</label>
         <input type="file" id="foto-arquivo" accept="image/*" />
 
@@ -453,6 +470,37 @@
         });
       }
 
+      // Função responsável por excluir a foto do Storage e da Tabela
+      async function excluirFoto(id, url, btn) {
+        if (!confirm("Tem certeza que deseja remover esta foto da galeria?"))
+          return;
+
+        btn.disabled = true;
+        btn.innerText = "⏳ A remover...";
+
+        try {
+          const nomeArquivo = url.split("/").pop();
+
+          if (nomeArquivo) {
+            await _supabase.storage.from("galeria").remove([nomeArquivo]);
+          }
+
+          const { error } = await _supabase.from("fotos").delete().eq("id", id);
+
+          if (error) {
+            alert("Erro ao excluir foto: " + error.message);
+            btn.disabled = false;
+            btn.innerText = "🗑️ Remover";
+          } else {
+            carregarFotos();
+          }
+        } catch (err) {
+          alert("Erro na remoção: " + err.message);
+          btn.disabled = false;
+          btn.innerText = "🗑️ Remover";
+        }
+      }
+
       function otimizarImagem(file) {
         return new Promise((resolve) => {
           const reader = new FileReader();
@@ -493,6 +541,7 @@
         const btn = document.getElementById("btn-upload");
         const inputTitulo = document.getElementById("foto-titulo");
         const inputCategoria = document.getElementById("foto-categoria");
+        const inputDescricao = document.getElementById("foto-descricao");
         const arquivoInput = document.getElementById("foto-arquivo");
         const chkNovoServico = document.getElementById("chk-novo-servico");
 
@@ -501,6 +550,7 @@
           .trim()
           .toLowerCase()
           .replace(/\s+/g, "-");
+        const descricaoCustom = inputDescricao.value.trim();
         const arquivo = arquivoInput.files[0];
 
         if (!titulo || !arquivo) {
@@ -521,7 +571,6 @@
         btn.innerText = "⏳ A otimizar e enviar...";
 
         try {
-          // 1. Otimiza e envia a foto para o Storage
           const imagemOtimizadaBlob = await otimizarImagem(arquivo);
           const nomeArquivo = `${Date.now()}_foto.webp`;
 
@@ -539,11 +588,43 @@
 
           const urlPublica = publicUrlData.publicUrl;
 
-          // 2. Insere a foto na tabela 'fotos'
+          // Se ela não preencheu a descrição personalizada, podemos usar o dicionário padrão como fallback
+          const descricoesPadrao = {
+            "volume brasileiro":
+              "Preenchimento denso e marcante com fios ultra leves que mantêm a saúde do cílio natural.",
+            "volume egípcio":
+              "Efeito natural que realça a curvatura e o comprimento sem pesar o olhar, proporcionando elegância.",
+            "efeito fox eye":
+              "Mapeamento alongado no canto externo para promover um olhar levemente puxado e sofisticado.",
+            "volume baby":
+              "Proporciona um efeito leve e delicado, ideal para quem busca realçar o olhar com suavidade.",
+            "volume wispy":
+              "Técnica moderna com efeito de picos texturizados, garantindo um olhar marcante e moderno.",
+            "design com henna":
+              "Design personalizado com aplicação de henna para preencher falhas e definir o formato perfeito.",
+            "design sem henna":
+              "Design de sobrancelha impecável, proporcionando um visual natural, limpo e bem definido.",
+          };
+
+          let descricaoFinal = descricaoCustom;
+          if (!descricaoFinal) {
+            const tLower = titulo.toLowerCase();
+            descricaoFinal =
+              "Transformação exclusiva realizada com todo cuidado para realçar a sua beleza natural.";
+            for (const [chave, desc] of Object.entries(descricoesPadrao)) {
+              if (tLower.includes(chave)) {
+                descricaoFinal = desc;
+                break;
+              }
+            }
+          }
+
+          // 2. Insere a foto na tabela 'fotos' incluindo a descrição
           const { error: dbFotoError } = await _supabase.from("fotos").insert([
             {
               titulo: titulo,
               categoria: categoria || "geral",
+              descricao: descricaoFinal,
               url: urlPublica,
             },
           ]);
@@ -577,6 +658,7 @@
           // Limpa todos os campos
           inputTitulo.value = "";
           inputCategoria.value = "";
+          inputDescricao.value = "";
           arquivoInput.value = "";
           document.getElementById("srv-preco").value = "";
           document.getElementById("srv-m15").value = "";
@@ -591,26 +673,6 @@
         } finally {
           btn.disabled = false;
           btn.innerText = "📤 Fazer Upload e Publicar";
-        }
-      }
-
-      async function excluirFoto(id, url, btn) {
-        if (!confirm("Tem certeza que deseja remover esta foto?")) return;
-
-        btn.disabled = true;
-        btn.innerText = "⏳ A remover...";
-
-        const nomeArquivo = url.split("/").pop();
-
-        await _supabase.storage.from("galeria").remove([nomeArquivo]);
-        const { error } = await _supabase.from("fotos").delete().eq("id", id);
-
-        if (error) {
-          alert("Erro ao excluir foto: " + error.message);
-          btn.disabled = false;
-          btn.innerText = "🗑️ Remover";
-        } else {
-          carregarFotos();
         }
       }
     </script>
